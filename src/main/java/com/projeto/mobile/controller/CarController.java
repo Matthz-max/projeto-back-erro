@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.projeto.mobile.dto.FavoriteDTO;
 import com.projeto.mobile.entity.CarEntity;
 import com.projeto.mobile.service.CarService;
 
@@ -35,13 +35,15 @@ public class CarController {
         return carService.saveCar(car);
     }
 
-    @DeleteMapping("/deletar{id}")
+    @DeleteMapping("/deletar/{id}")
     public void deleteCar(@PathVariable Long id) {
         carService.deleteCar(id);
     }
 
     @PutMapping("/{id}/favorite")
-    public CarEntity updateFavorite(@PathVariable Long id, @RequestParam Boolean isFavorite) {
-        return carService.updateFavorite(id, isFavorite);
+    public CarEntity updateFavorite(@PathVariable Long id, @RequestBody FavoriteDTO favoriteDTO) {
+        return carService.updateFavorite(id, favoriteDTO.getIsFavorite());
     }
+
+
 }
