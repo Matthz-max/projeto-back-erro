@@ -3,15 +3,23 @@ package com.projeto.mobile.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.mobile.entity.CarEntity;
 import com.projeto.mobile.service.CarService;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/cars")
-@CrossOrigin(origins = "*") 
 public class CarController {
 
     @Autowired
@@ -22,38 +30,18 @@ public class CarController {
         return carService.getAllCars();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CarEntity> getCarById(@PathVariable Long id) {
-        try {
-            CarEntity car = carService.getCarById(id);
-            return ResponseEntity.ok(car);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping
+    @PostMapping("/salvar")
     public CarEntity createCar(@RequestBody CarEntity car) {
-        return carService.createCar(car);
+        return carService.saveCar(car);
     }
 
-    @PutMapping("/atualizar/{id}")
-    public ResponseEntity<CarEntity> updateCar(@PathVariable Long id, @RequestBody CarEntity carDetails) {
-        try {
-            CarEntity updatedCar = carService.updateCar(id, carDetails);
-            return ResponseEntity.ok(updatedCar);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/deletar{id}")
+    public void deleteCar(@PathVariable Long id) {
+        carService.deleteCar(id);
     }
 
-    @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<Void> deleteCar(@PathVariable Long id) {
-        try {
-            carService.deleteCar(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    @PutMapping("/{id}/favorite")
+    public CarEntity updateFavorite(@PathVariable Long id, @RequestParam Boolean isFavorite) {
+        return carService.updateFavorite(id, isFavorite);
     }
 }

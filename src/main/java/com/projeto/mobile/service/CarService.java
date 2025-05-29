@@ -18,29 +18,17 @@ public class CarService {
         return carRepository.findAll();
     }
 
-    public CarEntity getCarById(Long id) {
-        return carRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Car not found with id: " + id));
-    }
-
-    public CarEntity createCar(CarEntity car) {
-        return carRepository.save(car);
-    }
-
-    public CarEntity updateCar(Long id, CarEntity carDetails) {
-        CarEntity car = carRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Car not found with id: " + id));
- 
-        car.setImagem(carDetails.getImagem());
-      
-
+    public CarEntity saveCar(CarEntity car) {
         return carRepository.save(car);
     }
 
     public void deleteCar(Long id) {
-        if (!carRepository.existsById(id)) {
-            throw new RuntimeException("Car not found with id: " + id);
-        }
         carRepository.deleteById(id);
+    }
+
+    public CarEntity updateFavorite(Long id, Boolean isFavorite) {
+        CarEntity car = carRepository.findById(id).orElseThrow(() -> new RuntimeException("Car not found"));
+        car.setIsFavorite(isFavorite);
+        return carRepository.save(car);
     }
 }
